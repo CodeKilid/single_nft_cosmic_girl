@@ -10,9 +10,10 @@ contract CosmicGirl is ERC721, ERC721Enumerable, ERC721URIStorage {
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIdCounter;
-    uint256 MAX_SUPPLY = 10000;
 
-    constructor() ERC721("Alireza", "MHR") {}
+    // uint256 MAX_SUPPLY = 10000;
+
+    constructor() ERC721("CosmicGirl", "CS") {}
 
     function safeMint(address to, string memory uri) public {
         uint256 tokenId = _tokenIdCounter.current();
