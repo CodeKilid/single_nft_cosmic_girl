@@ -17,7 +17,7 @@ contract CosmicGirl is ERC721, ERC721Enumerable, ERC721URIStorage {
 
     function safeMint(address to, string memory uri) public {
         uint256 tokenId = _tokenIdCounter.current();
-        require(tokenId <= MAX_SUPPLY, "all NFTs have been minted");
+        // require(tokenId <= MAX_SUPPLY, "all NFTs have been minted");
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
@@ -46,7 +46,7 @@ contract CosmicGirl is ERC721, ERC721Enumerable, ERC721URIStorage {
 
     function supportsInterface(
         bytes4 interfaceId
-    ) public view override(ERC721, ERC721Enumerable) returns (bool) {
+    ) public view override(ERC721, ERC721Enumerable, ERC721URIStorage) returns (bool) {
         return super.supportsInterface(interfaceId);
     }
 }
