@@ -11,13 +11,12 @@ contract CosmicGirl is ERC721, ERC721Enumerable, ERC721URIStorage {
 
     Counters.Counter private _tokenIdCounter;
 
-    // uint256 MAX_SUPPLY = 10000;
+    string constant uri = "https://ipfs.io/ipfs/Qma2rdJ7JxmSbn3tydFrU27Er9eJPeTYNHk19mFiF9FeDv";
 
     constructor() ERC721("CosmicGirl", "CS") {}
 
-    function safeMint(address to, string memory uri) public {
+    function safeMint(address to) public {
         uint256 tokenId = _tokenIdCounter.current();
-        // require(tokenId <= MAX_SUPPLY, "all NFTs have been minted");
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
