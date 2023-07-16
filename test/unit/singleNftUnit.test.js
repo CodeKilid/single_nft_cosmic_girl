@@ -44,10 +44,10 @@ describe("Nft Marketplace Tests", () => {
         it("sure the owner of nft after changing", async () => {
             let tokenId
 
-            tokenId = Number(await cosmicGirl.getTokenId())
+            const firstTokenId = Number(await cosmicGirl.getTokenId())
             await cosmicGirl.safeMint(deployer.address)
             console.log(tokenId)
-            const currentOwner = await cosmicGirl.ownerOf(tokenId)
+            const currentOwner = await cosmicGirl.ownerOf(firstTokenId)
             
             // expect deployer that minted be the owner
             expect(await currentOwner).to.equal(deployer.address)
@@ -56,21 +56,14 @@ describe("Nft Marketplace Tests", () => {
             await cosmicGirl.safeTransferFrom(deployer.address, player.address, tokenId)
             await cosmicGirl.safeMint(player.address)
 
-            tokenId = Number(await cosmicGirl.getTokenId())
-            const afterOwner = await cosmicGirl.ownerOf(tokenId)
+            const secondTokenId = Number(await cosmicGirl.getTokenId())
+            const afterOwner = await cosmicGirl.ownerOf(secondTokenId)
             
             expect(await afterOwner).to.equal(player.address)
         })
     })
 
-    describe("BeforeTokenTransfer", function () {
-        it("", async () => {})
-    })
-
-    describe("Burn", function () {
-        it("", async () => {})
-    })
-
+  
     describe("TokenURI", function () {
         it("getting token uri", async () => {
             const expectedTokenUri =
@@ -80,7 +73,5 @@ describe("Nft Marketplace Tests", () => {
         })
     })
 
-    describe("SupportsInterface", function () {
-        it("", async () => {})
-    })
+    
 })
