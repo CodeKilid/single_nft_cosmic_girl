@@ -24,7 +24,7 @@ const ETHERSCAN_API_KEY =
   process.env.ETHERSCAN_API_KEY || "KPFKND5CNVIRKXPNPAUYWY6I336TZKISXM";
 const SEPOLIA_RPC_URL = process.env.SEPOLIA_RPC_URL;
 const MUMBAI_RPC_URL = process.env.MUMBAI_RPC_URL;
-const POLYGON_ETHERSCAN_API_KEY = process.env.POLYGON_ETHERSCAN_API_KEY
+const POLYGON_SCAN_API_KEY = process.env.POLYGON_SCAN_API_KEY
 const MAINNET_POLYGON_URL = process.env.MAINNET_POLYGON_URL
 
 module.exports = {
@@ -99,7 +99,7 @@ module.exports = {
     ],
   },
   etherscan: {
-    apiKey: POLYGON_ETHERSCAN_API_KEY,
+    apiKey: POLYGON_SCAN_API_KEY,
   },
   gasReporter: {
     enabled: true,

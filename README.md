@@ -43,3 +43,9 @@ In the middle of the sand, under the stars of existence, dance with the desert w
 This NFT is a limited edition, created in the real world on cardboard using acrylic paints and signed by the artist, ensuring authenticity and rarity.
 
 Having a "girl of the universe" means having a piece of the universe, a gateway to infinite inspiration and thought that symbolizes power, contemplation and liberation.
+
+
+
+# contract address 
+
+0x1D7A6780d336381176380Ff2deFB6931187D9Fd7
