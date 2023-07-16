@@ -25,10 +25,20 @@ const ETHERSCAN_API_KEY =
 const SEPOLIA_RPC_URL = process.env.SEPOLIA_RPC_URL;
 const MUMBAI_RPC_URL = process.env.MUMBAI_RPC_URL;
 const POLYGON_ETHERSCAN_API_KEY = process.env.POLYGON_ETHERSCAN_API_KEY
+const MAINNET_POLYGON_URL = process.env.MAINNET_POLYGON_URL
 
 module.exports = {
   defaultNetwork: "hardhat",
   networks: {
+    polygon: {
+      url: MAINNET_POLYGON_URL,
+      accounts: [PRIVATE_KEY],
+      chainId: 137,
+      gasPrice: 20000000000, // Adjust the gas price as needed
+      blockConfirmations: 6,
+      saveDeployments: true,
+      allowUnlimitedContractSize: true,
+    },
     hardhat: {
       chainId: 31337,
       forking: {
