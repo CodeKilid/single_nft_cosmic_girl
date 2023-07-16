@@ -34,10 +34,6 @@ module.exports = {
       url: MAINNET_POLYGON_URL,
       accounts: [PRIVATE_KEY],
       chainId: 137,
-      gasPrice: 20000000000, // Adjust the gas price as needed
-      blockConfirmations: 6,
-      saveDeployments: true,
-      allowUnlimitedContractSize: true,
     },
     hardhat: {
       chainId: 31337,
