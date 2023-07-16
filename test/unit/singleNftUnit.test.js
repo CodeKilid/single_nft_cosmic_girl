@@ -3,7 +3,7 @@ const { ethers } = require("hardhat")
 
 describe("Nft Marketplace Tests", () => {
     // variables and contract deploying
-    let deployer, user, cosmicGirl
+    let deployer, player, cosmicGirl
     // const PRICE = ethers.utils.parseEther("0.1")
     const TOKEN_ID = 0
     beforeEach(async () => {
@@ -20,7 +20,7 @@ describe("Nft Marketplace Tests", () => {
         const nftContract = await ethers.getContractFactory("CosmicGirl")
         cosmicGirl = await nftContract.deploy()
         await cosmicGirl.safeMint(deployer.address)
-        // await cosmicGirl.deployed()
+
         // other describes
         // cosmicGirl -> contract name
         // account name ---> deployer, user
@@ -42,12 +42,24 @@ describe("Nft Marketplace Tests", () => {
             expect(await cosmicGirl.safeMint(deployer.address))
         })
         it("sure the owner of nft after changing", async () => {
-            const tokenId = await cosmicGirl.getTokenId()
+            let tokenId
+
+            tokenId = Number(await cosmicGirl.getTokenId())
+            await cosmicGirl.safeMint(deployer.address)
+            console.log(tokenId)
             const currentOwner = await cosmicGirl.ownerOf(tokenId)
             
-            // expect
-            expect(currentOwner).to.equal(deployer.address)
-            cosmicGirl.safeTransferFrom()
+            // expect deployer that minted be the owner
+            expect(await currentOwner).to.equal(deployer.address)
+
+            // Change ownership of the NFT from the deployer to the player
+            await cosmicGirl.safeTransferFrom(deployer.address, player.address, tokenId)
+            await cosmicGirl.safeMint(player.address)
+
+            tokenId = Number(await cosmicGirl.getTokenId())
+            const afterOwner = await cosmicGirl.ownerOf(tokenId)
+            
+            expect(await afterOwner).to.equal(player.address)
         })
     })
 
