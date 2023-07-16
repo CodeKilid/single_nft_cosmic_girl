@@ -4,7 +4,7 @@ const { ethers } = require("hardhat");
 describe("Nft Marketplace Tests", () => {
   // variables and contract deploying
   let deployer, user, cosmicGirl;
-  const PRICE = ethers.utils.parseEther("0.1");
+  //   const PRICE = ethers.utils.parseEther("0.1");
   const TOKEN_ID = 0;
   beforeEach(async () => {
     const accounts = await ethers.getSigners();
@@ -19,7 +19,7 @@ describe("Nft Marketplace Tests", () => {
     // nft --> ERC721 contract
     const nftContract = await ethers.getContractFactory("CosmicGirl");
     cosmicGirl = await nftContract.deploy();
-    await cosmicGirl.deployed();
+    // await cosmicGirl.deployed();
     // other describes
     // cosmicGirl -> contract name
     // account name ---> deployer, user
