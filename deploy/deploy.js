@@ -13,7 +13,12 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         ? 1
         : VERIFICATION_BLOCK_CONFIRMATIONS
 
-    log("-------------------------------------------")
+console.log(process.env.RPC_URL);
+module.exports = async function ({ deployments, getNamedAccounts }) {
+  const { deploy, log } = deployments;
+  const { deployer } = await getNamedAccounts();
+  log(deployer);
+  const args = [];
 
     const arguments = []
     const cosmicGirl = await deploy("CosmicGirl", {
