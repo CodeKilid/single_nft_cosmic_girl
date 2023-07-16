@@ -1,36 +1,33 @@
-const {
-  networkConfig,
-  developmentChains,
-  VERIFICATION_BLOCK_CONFIRMATIONS,
-} = require("../helper-hardhat-config.js");
 const { network } = require("hardhat");
-const { verify } = require("../utils/verify.js");
+const { developmentChains } = require("../helper-hardhat-config");
+const { verify } = require("../utils/verify");
+require("dotenv").config();
 
-module.exports = async ({ getNamedAccounts, deployments }) => {
+console.log(process.env.RPC_URL);
+module.exports = async function ({ deployments, getNamedAccounts }) {
   const { deploy, log } = deployments;
   const { deployer } = await getNamedAccounts();
-  const waitBlockConfirmations = developmentChains.includes(network.name)
-    ? 1
-    : VERIFICATION_BLOCK_CONFIRMATIONS;
+  log(deployer);
+  const args = [];
 
-  log("-------------------------------------------");
-
-  const arguments = [];
   const cosmicGirl = await deploy("CosmicGirl", {
     from: deployer,
-    args: arguments,
     log: true,
-    waitConfirmations: waitBlockConfirmations,
+    args: args,
   });
+  log(process.env.ETHERSCAN_API_KEY);
   if (
     !developmentChains.includes(network.name) &&
     process.env.ETHERSCAN_API_KEY
   ) {
     log("Verifying...");
-    await verify(cosmicGirl.address, arguments);
-    log("Verified!");
+    await verify(cosmicGirl.address, args);
   }
-  log("----------------------------------------------------");
+  log("Deployed.");
+  log("-----------------------------------------------------------");
 };
 
-module.exports.tags = ["all", "cosmicGirl"];
+module.exports.tags = ["all", "CosmicGirl"];
+
+// mumbai testnet contract address = 0x1aaFdaD0df01546935aabAf64F5E9738281E452E
+// sepolia testnet contract address = 0x719f567537E7d274b40a8Eb0Af7F3ADe632F7C1a
