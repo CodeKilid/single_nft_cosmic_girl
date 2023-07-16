@@ -42,6 +42,11 @@ describe("Nft Marketplace Tests", () => {
             expect(await cosmicGirl.safeMint(deployer.address))
         })
         it("sure the owner of nft after changing", async () => {
+            const tokenId = await cosmicGirl.getTokenId()
+            const currentOwner = await cosmicGirl.ownerOf(tokenId)
+            
+            // expect
+            expect(currentOwner).to.equal(deployer.address)
             cosmicGirl.safeTransferFrom()
         })
     })
