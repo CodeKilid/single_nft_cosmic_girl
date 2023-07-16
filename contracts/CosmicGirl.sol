@@ -53,4 +53,8 @@ contract CosmicGirl is ERC721, ERC721Enumerable, ERC721URIStorage {
     function getTokenUri() public pure returns (string memory) {
         return uri;
     }
+
+    function getTokenId() public view returns (uint256) {
+        return _tokenIdCounter.current();
+    }
 }
