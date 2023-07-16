@@ -30,6 +30,10 @@ describe("constructor", function () {
   it("Intializing", async () => {});
 });
 
+describe("SafeMint", function () {
+  it("", async () => {});
+});
+
 describe("BeforeTokenTransfer", function () {
   it("", async () => {});
 });
