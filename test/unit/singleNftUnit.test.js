@@ -24,28 +24,28 @@ describe("Nft Marketplace Tests", () => {
     // cosmigGirl -> contract name
     // account name ---> deployer, user
   });
-});
 
-describe("constructor", function () {
-  it("Intializing", async () => {});
-});
+  describe("constructor", function () {
+    it("Intializing", async () => {});
+  });
 
-describe("SafeMint", function () {
-  it("", async () => {});
-});
+  describe("SafeMint", function () {
+    it("", async () => {});
+  });
 
-describe("BeforeTokenTransfer", function () {
-  it("", async () => {});
-});
+  describe("BeforeTokenTransfer", function () {
+    it("", async () => {});
+  });
 
-describe("Burn", function () {
-  it("", async () => {});
-});
+  describe("Burn", function () {
+    it("", async () => {});
+  });
 
-describe("TokenURI", function () {
-  it("", async () => {});
-});
+  describe("TokenURI", function () {
+    it("", async () => {});
+  });
 
-describe("SupportsInterface", function () {
-  it("", async () => {});
+  describe("SupportsInterface", function () {
+    it("", async () => {});
+  });
 });
