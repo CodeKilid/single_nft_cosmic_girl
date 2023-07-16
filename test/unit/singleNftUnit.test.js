@@ -4,7 +4,7 @@ const { ethers } = require("hardhat")
 describe("Nft Marketplace Tests", () => {
     // variables and contract deploying
     let deployer, user, cosmicGirl
-    const PRICE = ethers.utils.parseEther("0.1")
+    // const PRICE = ethers.utils.parseEther("0.1")
     const TOKEN_ID = 0
     beforeEach(async () => {
         const accounts = await ethers.getSigners()
@@ -12,14 +12,15 @@ describe("Nft Marketplace Tests", () => {
         deployer = accounts[0]
         player = accounts[1]
 
-        await deployments.fixture(["all"]) // deploy all of those contracts across deploy directory
+        // await deployments.fixture(["all"]) // deploy all of those contracts across deploy directory
 
         // contracts
 
         // nft --> ERC721 contract
         const nftContract = await ethers.getContractFactory("CosmicGirl")
         cosmicGirl = await nftContract.deploy()
-        await cosmicGirl.deployed()
+        await cosmicGirl.safeMint(deployer.address)
+        // await cosmicGirl.deployed()
         // other describes
         // cosmicGirl -> contract name
         // account name ---> deployer, user
@@ -30,7 +31,13 @@ describe("Nft Marketplace Tests", () => {
     })
 
     describe("SafeMint", function () {
-        it("", async () => {})
+        it("want sure minting works", async () => {
+            expect(await cosmicGirl.safeMint(deployer.address))
+        })
+        it("sure the owner of nft after changing", async () => {
+            cosmicGirl.safeTransferFrom()
+        })
+
     })
 
     describe("BeforeTokenTransfer", function () {
