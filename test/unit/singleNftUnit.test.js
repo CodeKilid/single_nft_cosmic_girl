@@ -27,9 +27,12 @@ describe("Nft Marketplace Tests", () => {
 
   describe("constructor", function () {
     it("Intializing", async () => {
-      const name = "";
-      const symbol = "";
-      const tokenId = "";
+      const name = await cosmicGirl.name();
+      const symbol = await cosmicGirl.symbol();
+      // tokenId = 0
+
+      assert.equal(name, "CosmicGirl");
+      assert.equal(symbol, "CS");
     });
   });
 
