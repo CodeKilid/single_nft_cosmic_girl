@@ -19,7 +19,7 @@ describe("Nft Marketplace Tests", () => {
         // nft --> ERC721 contract
         const nftContract = await ethers.getContractFactory("CosmicGirl")
         cosmicGirl = await nftContract.deploy()
-        await cosmicGirl.safeMint(deployer.address)
+        // await cosmicGirl.safeMint(deployer.address)
 
         // other describes
         // cosmicGirl -> contract name
@@ -44,22 +44,23 @@ describe("Nft Marketplace Tests", () => {
         it("sure the owner of nft after changing", async () => {
             let tokenId
 
-            const firstTokenId = Number(await cosmicGirl.getTokenId())
             await cosmicGirl.safeMint(deployer.address)
-            console.log(tokenId)
-            const currentOwner = await cosmicGirl.ownerOf(firstTokenId)
+            tokenId = (Number(await cosmicGirl.getTokenId()) - 1)
+            console.log(`first : ${tokenId}`)
+            const currentOwner = await cosmicGirl.ownerOf(tokenId)
             
             // expect deployer that minted be the owner
-            expect(await currentOwner).to.equal(deployer.address)
+            expect(currentOwner).to.equal(deployer.address)
+            console.log(`current owner: ${currentOwner}`)
 
             // Change ownership of the NFT from the deployer to the player
             await cosmicGirl.safeTransferFrom(deployer.address, player.address, tokenId)
-            await cosmicGirl.safeMint(player.address)
+            await cosmicGirl.connect(player).safeMint(player.address)
 
-            const secondTokenId = Number(await cosmicGirl.getTokenId())
-            const afterOwner = await cosmicGirl.ownerOf(secondTokenId)
-            
-            expect(await afterOwner).to.equal(player.address)
+            tokenId = (Number(await cosmicGirl.getTokenId()) - 1)
+            const afterOwner = await cosmicGirl.ownerOf(tokenId)
+            console.log(`second : ${tokenId}`)
+            expect(afterOwner).to.equal(player.address)
         })
     })
 
@@ -73,5 +74,5 @@ describe("Nft Marketplace Tests", () => {
         })
     })
 
-    
+
 })
