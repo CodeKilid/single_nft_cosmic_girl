@@ -11,7 +11,8 @@ contract CosmicGirl is ERC721, ERC721Enumerable, ERC721URIStorage {
 
     Counters.Counter private _tokenIdCounter;
 
-    string constant uri = "https://ipfs.io/ipfs/Qma2rdJ7JxmSbn3tydFrU27Er9eJPeTYNHk19mFiF9FeDv";
+    string private constant uri =
+        "https://ipfs.io/ipfs/Qma2rdJ7JxmSbn3tydFrU27Er9eJPeTYNHk19mFiF9FeDv";
 
     constructor() ERC721("CosmicGirl", "CS") {}
 
@@ -33,7 +34,9 @@ contract CosmicGirl is ERC721, ERC721Enumerable, ERC721URIStorage {
         super._beforeTokenTransfer(from, to, tokenId, batchSize);
     }
 
-    function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
+    function _burn(
+        uint256 tokenId
+    ) internal override(ERC721, ERC721URIStorage) {
         super._burn(tokenId);
     }
 
@@ -45,7 +48,16 @@ contract CosmicGirl is ERC721, ERC721Enumerable, ERC721URIStorage {
 
     function supportsInterface(
         bytes4 interfaceId
-    ) public view override(ERC721, ERC721Enumerable, ERC721URIStorage) returns (bool) {
+    )
+        public
+        view
+        override(ERC721, ERC721Enumerable, ERC721URIStorage)
+        returns (bool)
+    {
         return super.supportsInterface(interfaceId);
+    }
+
+    function getTokenUri() public pure returns (string memory) {
+        return uri;
     }
 }
