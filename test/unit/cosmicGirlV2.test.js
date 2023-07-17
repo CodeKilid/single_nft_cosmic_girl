@@ -64,15 +64,36 @@ describe("Cosmic Girl V2 Tests", () => {
             expect(afterOwner).to.equal(player.address)
         })
 
-        it("only owner can mint the nft", async () => {})
+        it("only owner can mint the nft", async () => {
+            await expect(cosmicGirlV2.connect(player).safeMint(player.address)).to.be.revertedWith(
+                "Ownable: caller is not the owner",
+            )
+        })
+
+        it("it can be minted only once", async () => {
+            await cosmicGirlV2.safeMint(deployer.address)
+            const tokenId = Number(await cosmicGirlV2.getTokenId()) - 1
+            await cosmicGirlV2.safeTransferFrom(deployer.address, player.address, tokenId)
+            await expect(cosmicGirlV2.connect(player).safeMint(player.address)).to.be.revertedWith(
+                "Ownable: caller is not the owner",
+            )
+        })
     })
 
     describe("TokenURI", function () {
-        it("getting token uri", async () => {
+        it("getting token uri V2", async () => {
+            await cosmicGirlV2.safeMint(deployer.address)
+            const tokenId = Number(await cosmicGirlV2.getTokenId()) - 1
             const expectedTokenUri =
                 "https://ipfs.io/ipfs/Qma2rdJ7JxmSbn3tydFrU27Er9eJPeTYNHk19mFiF9FeDv"
-            const tokenUri = await cosmicGirlV2.getTokenUri()
+            const tokenUri = await cosmicGirlV2.tokenURI(tokenId)
+
             assert.equal(expectedTokenUri, tokenUri)
         })
     })
+
+    // describe("Burn Nft", function(){
+    //     it("should burn the nft", async ()=> {
+
+    //     })}
 })

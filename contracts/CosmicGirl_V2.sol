@@ -12,20 +12,17 @@ contract CosmicGirlV2 is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
 
     Counters.Counter private _tokenIdCounter;
 
-    string private _baseTokenURI;
+    string private constant uri =
+        "https://ipfs.io/ipfs/Qma2rdJ7JxmSbn3tydFrU27Er9eJPeTYNHk19mFiF9FeDv";
 
     constructor() ERC721("CosmicGirl", "CS") {}
-
-    function setBaseURI(string memory baseURI) external onlyOwner {
-        _baseTokenURI = baseURI;
-    }
 
     function safeMint(address to) public onlyOwner {
         require(to != address(0), "Invalid address");
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
-        _setTokenURI(tokenId, string(abi.encodePacked(_baseTokenURI, tokenId)));
+        _setTokenURI(tokenId, uri);
     }
 
     // The following functions are overrides required by Solidity.
