@@ -17,7 +17,7 @@ describe("Cosmic Girl V2 Tests", () => {
         // contracts
 
         // nft --> ERC721 contract
-        const nftContract = await ethers.getContractFactory("cosmicGirlV2")
+        const nftContract = await ethers.getContractFactory("CosmicGirlV2")
         cosmicGirlV2 = await nftContract.deploy()
         // await cosmicGirlV2.safeMint(deployer.address)
 
@@ -33,7 +33,7 @@ describe("Cosmic Girl V2 Tests", () => {
             const initialTokenId = await cosmicGirlV2.getTokenId()
             const expectedTokenId = 0
 
-            assert.equal(name, "cosmicGirlV2")
+            assert.equal(name, "CosmicGirl")
             assert.equal(symbol, "CS")
             assert.equal(initialTokenId, expectedTokenId)
         })
@@ -43,7 +43,7 @@ describe("Cosmic Girl V2 Tests", () => {
         it("want sure minting works", async () => {
             expect(await cosmicGirlV2.safeMint(deployer.address))
         })
-        it("sure the owner of nft after changing", async () => {
+        it("sure the owner of nft after changing V2", async () => {
             let tokenId
 
             await cosmicGirlV2.safeMint(deployer.address)
@@ -56,14 +56,15 @@ describe("Cosmic Girl V2 Tests", () => {
             console.log(`current owner: ${currentOwner}`)
 
             // Change ownership of the NFT from the deployer to the player
-            await cosmicGirlV2.safeTransferFrom(deployer.address, player.address, tokenId)
-            await cosmicGirlV2.connect(player).safeMint(player.address)
-
+            await cosmicGirlV2.safeTransferFrom(currentOwner, player.address, tokenId)
             tokenId = Number(await cosmicGirlV2.getTokenId()) - 1
             const afterOwner = await cosmicGirlV2.ownerOf(tokenId)
             console.log(`second : ${tokenId}`)
+            console.log(`second owner: ${await cosmicGirlV2.ownerOf(tokenId)}`)
             expect(afterOwner).to.equal(player.address)
         })
+
+        it("only owner can mint the nft", async () => {})
     })
 
     describe("TokenURI", function () {

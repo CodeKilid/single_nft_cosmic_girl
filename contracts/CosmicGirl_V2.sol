@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.14;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
@@ -12,12 +12,12 @@ contract CosmicGirlV2 is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
 
     Counters.Counter private _tokenIdCounter;
 
-    string private _baseURI;
+    string private _baseTokenURI;
 
     constructor() ERC721("CosmicGirl", "CS") {}
 
     function setBaseURI(string memory baseURI) external onlyOwner {
-        _baseURI = baseURI;
+        _baseTokenURI = baseURI;
     }
 
     function safeMint(address to) public onlyOwner {
@@ -25,18 +25,26 @@ contract CosmicGirlV2 is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
-        _setTokenURI(tokenId, string(abi.encodePacked(_baseURI, tokenId.toString())));
-    }
+        _setTokenURI(tokenId, string(abi.encodePacked(_baseTokenURI, tokenId)));
     }
 
     // The following functions are overrides required by Solidity.
+
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 tokenId,
+        uint256 batchSize
+    ) internal override(ERC721, ERC721Enumerable) {
+        super._beforeTokenTransfer(from, to, tokenId, batchSize);
+    }
 
     function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
         super._burn(tokenId);
     }
 
     function burnToken(uint256 tokenId) external onlyOwner {
-    // Perform any additional checks or operations before burning the token
+        // Perform any additional checks or operations before burning the token
         _burn(tokenId);
     }
 
