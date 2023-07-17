@@ -1,12 +1,13 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.14;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract CosmicGirl is ERC721, ERC721Enumerable, ERC721URIStorage {
+contract CosmicGirlV2 is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIdCounter;
@@ -16,7 +17,8 @@ contract CosmicGirl is ERC721, ERC721Enumerable, ERC721URIStorage {
 
     constructor() ERC721("CosmicGirl", "CS") {}
 
-    function safeMint(address to) public {
+    function safeMint(address to) public onlyOwner {
+        require(to != address(0), "Invalid address");
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
@@ -38,6 +40,11 @@ contract CosmicGirl is ERC721, ERC721Enumerable, ERC721URIStorage {
         super._burn(tokenId);
     }
 
+    function burnToken(uint256 tokenId) external onlyOwner {
+        // Perform any additional checks or operations before burning the token
+        _burn(tokenId);
+    }
+
     function tokenURI(
         uint256 tokenId
     ) public view override(ERC721, ERC721URIStorage) returns (string memory) {
@@ -48,10 +55,6 @@ contract CosmicGirl is ERC721, ERC721Enumerable, ERC721URIStorage {
         bytes4 interfaceId
     ) public view override(ERC721, ERC721Enumerable, ERC721URIStorage) returns (bool) {
         return super.supportsInterface(interfaceId);
-    }
-
-    function getTokenUri() public pure returns (string memory) {
-        return uri;
     }
 
     function getTokenId() public view returns (uint256) {
