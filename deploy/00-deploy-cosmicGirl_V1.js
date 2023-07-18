@@ -26,4 +26,4 @@ module.exports = async function ({ deployments, getNamedAccounts }) {
 
 module.exports.tags = ["all", "CosmicGirl"]
 
-// 0x28E9FBe8D14E9Ffd99cF0a72A0B8D710c4e8F1f1
+// 0xdab0FEfdEb15eF198A6CC3332F6536d0B47cCe3c
