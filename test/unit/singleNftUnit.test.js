@@ -3,7 +3,7 @@ const { ethers } = require("hardhat")
 
 describe("Cosmic Girl V2 Tests", () => {
     // variables and contract deploying
-    let deployer, player, cosmicGirlV2
+    let deployer, player, cosmicGirl
     // const PRICE = ethers.utils.parseEther("0.1")
     const TOKEN_ID = 0
     beforeEach(async () => {
@@ -17,20 +17,20 @@ describe("Cosmic Girl V2 Tests", () => {
         // contracts
 
         // nft --> ERC721 contract
-        const nftContract = await ethers.getContractFactory("CosmicGirlV2")
-        cosmicGirlV2 = await nftContract.deploy()
-        // await cosmicGirlV2.safeMint(deployer.address)
+        const nftContract = await ethers.getContractFactory("CosmicGirl")
+        cosmicGirl = await nftContract.deploy()
+        // await cosmicGirl.safeMint(deployer.address)
 
         // other describes
-        // cosmicGirlV2 -> contract name
+        // cosmicGirl -> contract name
         // account name ---> deployer, user
     })
 
     describe("constructor", function () {
         it("Intializing", async () => {
-            const name = await cosmicGirlV2.name()
-            const symbol = await cosmicGirlV2.symbol()
-            const initialTokenId = await cosmicGirlV2.getTokenId()
+            const name = await cosmicGirl.name()
+            const symbol = await cosmicGirl.symbol()
+            const initialTokenId = await cosmicGirl.getTokenId()
             const expectedTokenId = 0
 
             assert.equal(name, "CosmicGirl")
@@ -41,40 +41,40 @@ describe("Cosmic Girl V2 Tests", () => {
 
     describe("SafeMint", function () {
         it("want sure minting works", async () => {
-            expect(await cosmicGirlV2.safeMint(deployer.address))
+            expect(await cosmicGirl.safeMint(deployer.address))
         })
         it("sure the owner of nft after changing V2", async () => {
             let tokenId
 
-            await cosmicGirlV2.safeMint(deployer.address)
-            tokenId = Number(await cosmicGirlV2.getTokenId()) - 1
+            await cosmicGirl.safeMint(deployer.address)
+            tokenId = Number(await cosmicGirl.getTokenId()) - 1
             console.log(`first : ${tokenId}`)
-            const currentOwner = await cosmicGirlV2.ownerOf(tokenId)
+            const currentOwner = await cosmicGirl.ownerOf(tokenId)
 
             // expect deployer that minted be the owner
             expect(currentOwner).to.equal(deployer.address)
             console.log(`current owner: ${currentOwner}`)
 
             // Change ownership of the NFT from the deployer to the player
-            await cosmicGirlV2.safeTransferFrom(currentOwner, player.address, tokenId)
-            tokenId = Number(await cosmicGirlV2.getTokenId()) - 1
-            const afterOwner = await cosmicGirlV2.ownerOf(tokenId)
+            await cosmicGirl.safeTransferFrom(currentOwner, player.address, tokenId)
+            tokenId = Number(await cosmicGirl.getTokenId()) - 1
+            const afterOwner = await cosmicGirl.ownerOf(tokenId)
             console.log(`second : ${tokenId}`)
-            console.log(`second owner: ${await cosmicGirlV2.ownerOf(tokenId)}`)
+            console.log(`second owner: ${await cosmicGirl.ownerOf(tokenId)}`)
             expect(afterOwner).to.equal(player.address)
         })
 
         it("only owner can mint the nft", async () => {
-            await expect(cosmicGirlV2.connect(player).safeMint(player.address)).to.be.revertedWith(
+            await expect(cosmicGirl.connect(player).safeMint(player.address)).to.be.revertedWith(
                 "Ownable: caller is not the owner",
             )
         })
 
         it("it can be minted only once", async () => {
-            await cosmicGirlV2.safeMint(deployer.address)
-            const tokenId = Number(await cosmicGirlV2.getTokenId()) - 1
-            await cosmicGirlV2.safeTransferFrom(deployer.address, player.address, tokenId)
-            await expect(cosmicGirlV2.connect(player).safeMint(player.address)).to.be.revertedWith(
+            await cosmicGirl.safeMint(deployer.address)
+            const tokenId = Number(await cosmicGirl.getTokenId()) - 1
+            await cosmicGirl.safeTransferFrom(deployer.address, player.address, tokenId)
+            await expect(cosmicGirl.connect(player).safeMint(player.address)).to.be.revertedWith(
                 "Ownable: caller is not the owner",
             )
         })
@@ -82,11 +82,11 @@ describe("Cosmic Girl V2 Tests", () => {
 
     describe("TokenURI", function () {
         it("getting token uri V2", async () => {
-            await cosmicGirlV2.safeMint(deployer.address)
-            const tokenId = Number(await cosmicGirlV2.getTokenId()) - 1
+            await cosmicGirl.safeMint(deployer.address)
+            const tokenId = Number(await cosmicGirl.getTokenId()) - 1
             const expectedTokenUri =
                 "https://ipfs.io/ipfs/Qma2rdJ7JxmSbn3tydFrU27Er9eJPeTYNHk19mFiF9FeDv"
-            const tokenUri = await cosmicGirlV2.tokenURI(tokenId)
+            const tokenUri = await cosmicGirl.tokenURI(tokenId)
 
             assert.equal(expectedTokenUri, tokenUri)
         })
@@ -94,18 +94,52 @@ describe("Cosmic Girl V2 Tests", () => {
 
     describe("Burn Nft", function () {
         it("only owner can burn the nft", async () => {
-            await cosmicGirlV2.safeMint(deployer.address)
-            const tokenId = Number(await cosmicGirlV2.getTokenId()) - 1
-            expect(await cosmicGirlV2.connect(player).burnToken(tokenId)).to.be.revertedWith(
+            await cosmicGirl.safeMint(deployer.address)
+            const tokenId = Number(await cosmicGirl.getTokenId()) - 1
+            await expect(cosmicGirl.connect(player).burnToken(tokenId)).to.be.revertedWith(
                 "Ownable: caller is not the owner",
             )
         })
-        it("should burn the nft", async () => {
-            await cosmicGirlV2.safeMint(deployer.address)
-            const tokenId = Number(await cosmicGirlV2.getTokenId()) - 1
-            const contractAddress = await cosmicGirlV2.burnToken(tokenId)
 
-            console.log(contractAddress)
+        // after burning NFT , token id will lose its owner and will be free
+        it("nft should be burend correctly by owner", async () => {
+            //Minting NFT
+            await cosmicGirl.safeMint(deployer.address)
+            //In Use Token ID and The Owner
+            const tokenId = Number(await cosmicGirl.getTokenId()) - 1
+            const currentOwner = await cosmicGirl.ownerOf(tokenId)
+
+            //burning token
+            await cosmicGirl.burnToken(tokenId)
+
+            assert.equal(currentOwner, deployer.address)
+            await expect(cosmicGirl.ownerOf(tokenId)).to.be.revertedWith(
+                "ERC721: invalid token ID",
+            )
+        })
+
+        it("a burned nft can't be mint again by new owner", async () => {
+            //First time mint
+            await cosmicGirl.safeMint(deployer.address)
+            const tokenId = Number(await cosmicGirl.getTokenId()) - 1
+            const currentOwner = await cosmicGirl.ownerOf(tokenId)
+
+            //Burning token
+            await cosmicGirl.burnToken(tokenId)
+
+            //Mint again by owner or deployer
+            await cosmicGirl.safeMint(deployer.address)
+            const assingTokenIdAfterBurn = Number(await cosmicGirl.getTokenId()) - 1
+            const expectedTokenIdAfterBurn = 1
+            const secondTimeMintOwner = await cosmicGirl.ownerOf(assingTokenIdAfterBurn)
+
+            //Assertions
+            assert.equal(currentOwner, deployer.address)
+            await expect(cosmicGirl.connect(player).safeMint(player.address)).to.be.revertedWith(
+                "Ownable: caller is not the owner",
+            )
+            assert.equal(secondTimeMintOwner, deployer.address)
+            assert.equal(assingTokenIdAfterBurn, expectedTokenIdAfterBurn)
         })
     })
 })
